@@ -79,4 +79,20 @@ userController.post("/signin", async (req, res) => {
   }
 });
 
+userController.get("/", authMiddleware.verifyToken, async (req, res) => {
+  const users = await userModel.find(
+    { email: { $ne: req.user.email } },
+    { password: 0, __v: 0 }
+  );
+  return res.status(200).json(users);
+});
+
+userController.get("/:id", authMiddleware.verifyToken, async (req, res) => {
+  const user = await userModel.findOne(
+    { _id: req.params.id },
+    { password: 0, __v: 0 }
+  );
+  return res.status(200).json(user);
+});
+
 module.exports = userController;

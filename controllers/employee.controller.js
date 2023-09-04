@@ -9,7 +9,7 @@ employeeController.post("/", authMiddleware.verifyToken, async (req, res) => {
 });
 
 employeeController.get("/", authMiddleware.verifyToken, async (req, res) => {
-  const employees = await employeeModel.find();
+  const employees = await employeeModel.find({ ...req.query });
   return res.status(200).json(employees);
 });
 

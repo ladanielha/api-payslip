@@ -5,7 +5,7 @@ const authMiddleware = require("../middlewares/auth.middleware");
 const userModel = require("../models/user.model");
 const userController = express.Router();
 
-userController.post("/", [authMiddleware.verifyToken], async (req, res) => {
+userController.post("/", async (req, res) => {
   try {
     const { firstName, lastName, email, password } = req.body;
 
@@ -91,6 +91,16 @@ userController.get("/:id", authMiddleware.verifyToken, async (req, res) => {
   const user = await userModel.findOne(
     { _id: req.params.id },
     { password: 0, __v: 0 }
+  );
+  return res.status(200).json(user);
+});
+
+userController.put("/:id", authMiddleware.verifyToken, async (req, res) => {
+  const { email, password, ...newUser } = req.body;
+  const user = await userModel.findOneAndUpdate(
+    { _id: req.params.id },
+    newUser,
+    { new: true }
   );
   return res.status(200).json(user);
 });

@@ -106,4 +106,3 @@ userController.put("/:id", authMiddleware.verifyToken, async (req, res) => {
 });
 
 module.exports = userController;
-satisfies;
